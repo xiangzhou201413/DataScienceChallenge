@@ -33,7 +33,7 @@ class DefaultPredictions(object):
         print(all_variables, self.label_symbol)
         label_list = list(self.all_data[self.label_symbol])
         self.default_ct = label_list.count(1)
-        print(self.default_ct)
+        print("Number of default:",self.default_ct)
         if self.if_balance_data:
             self._balance_data()
         else:
@@ -45,10 +45,11 @@ class DefaultPredictions(object):
         
     def _balance_data(self):
         not_default_index = list(self.all_data.loc[self.all_data[self.label_symbol] == 0].index)
-        not_default_select = random.sample(not_default_index, self.default_ct)
-        self.selected_data = self.all_data.drop(self.all_data.index[not_default_select])
+        not_default_drop = random.sample(not_default_index, len(not_default_index)-self.default_ct)
+        self.selected_data = self.all_data.drop(self.all_data.index[not_default_drop])
         print("Some of balanced data:")
         print(self.selected_data[:30])
+        print("Total number of balanced data:",self.selected_data.shape)
 
     def _encoding_category_data(self,data):
         print("Transforming category data ...")
